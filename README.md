@@ -13,9 +13,9 @@ The script generates a list of timestamped detection events resulting from a BB8
 - Interference-based detection (X basis)
 - Gaussian timing jitter to simulate realistic detector response
 - Background noise events (uncorrelated random detections)
-- Final histogram plotting of detection events within a single time-bin window
+- Final histogram plotting of detection events within a single quantum state window (two time-bins)
 
-The output simulates what an experiment might produce, and can be analyzed to extract bit values, sift keys, and calculate QBER or visibility.
+The output simulates what an experiment might produce, and can be analyzed to extract bit values, sift keys, calculate QBER or visibility, and extract secure key rate.
 
 ## 📂 Files
 
@@ -76,10 +76,10 @@ If you plan to use these arrays for downstream analysis, you can save them using
 
 The final output of the simulation is stored in a NumPy array called `timestamps`, which is a 2D array with shape `(N, 2)`:
 
-timestamps[i, 0] → timestamp in seconds (float) timestamps[i, 1] → detector number (1, 2, or 3)
+timestamps[i, 0] → timestamp in seconds (float); timestamps[i, 1] → detector number (1, 2, or 3)
 
 
 - **Detector 1**: Time-of-arrival detection (Z basis)
-- **Detector 2/3**: Interferometric detection (X basis), distinguishing phase 0 vs π
+- **Detector 2/3**: Time of interferometric detection (X basis), distinguishing phase 0 vs π 
 - The timestamps are sorted chronologically.
 - Noise events are randomly interleaved and indistinguishable from valid detections without additional metadata.
