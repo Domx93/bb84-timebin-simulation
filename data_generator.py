@@ -5,8 +5,6 @@ Created on 2025-04-22
 
 Author: Domenico Ribezzo
 """
-
-
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -15,6 +13,8 @@ num_states = 100000
 state_duration = 2e-9
 bin_offset = 1e-9
 jitter_std = 40e-12
+total_time = num_states * state_duration  # for example 10000 * 2ns
+
 
 # Alice: bases and bits
 alice_bases = np.random.randint(0, 2, size=num_states)   # 0=Z, 1=X
@@ -59,7 +59,7 @@ for i in range(num_states):
         else:
             # Bob in X basis → good interferometric measurement
             # |+⟩ → output 0 (detector 2), |−⟩ → output 1 (detector 3)
-            emission_delay = bit * bin_offset
+            emission_delay =  bin_offset
             ts = t0 + emission_delay + np.random.normal(0, jitter_std)
             if (bit==0):
                 detector=2
@@ -71,9 +71,6 @@ for i in range(num_states):
 
 # Number of noise events
 num_noise_events = 10000
-
-# Totaltime
-total_time = num_states * state_duration  # for example 10000 * 2ns
 
 # Generate random timestamps uniformly distributed
 noise_times = np.random.uniform(0, total_time, size=num_noise_events)
@@ -89,7 +86,9 @@ timestamps = np.vstack([timestamps, noise_events])
 timestamps = timestamps[timestamps[:, 0].argsort()]
 
 #shift USEFUL TO DO
-timestamps[:, 0] += 400e-12
+timestamps[:, 0] += 500e-12 #shift for better visualization 
+timestamps[:, 0] = np.mod(timestamps[:, 0], total_time) #avoid problems due to shift
+
 #extract times
 times = timestamps[:, 0]
 
@@ -97,6 +96,6 @@ times = timestamps[:, 0]
 plt.hist(times % state_duration * 1e12, bins=200, alpha=0.7)
 plt.xlabel("Time window (ps)")
 plt.ylabel("Counts")
-plt.title("Time-bon BB84 - Simulation")
+plt.title("Time-bin BB84 - Simulation")
 plt.grid(True)
 plt.show()
